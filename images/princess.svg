@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220">
+  <!-- 公主 -->
+  <path d="M42 108 Q38 180 60 196 L140 196 Q162 180 158 108 Z" fill="#8a5a3c"/>
+  <path d="M46 220 Q56 152 100 144 Q144 152 154 220 Z" fill="#ff8fb8"/>
+  <path d="M74 152 Q100 172 126 152 Q118 146 100 146 Q82 146 74 152 Z" fill="#ffd1e3"/>
+  <circle cx="100" cy="194" r="6" fill="#ffc83d"/>
+  <rect x="90" y="132" width="20" height="18" rx="6" fill="#ffe0cc"/>
+  <circle cx="100" cy="100" r="46" fill="#ffe0cc"/>
+  <path d="M52 100 Q54 50 100 50 Q146 50 148 100 Q132 74 112 76 Q104 66 96 76 Q70 72 52 100 Z" fill="#8a5a3c"/>
+  <ellipse cx="82" cy="104" rx="5.5" ry="7.5" fill="#3b2b4a"/>
+  <ellipse cx="118" cy="104" rx="5.5" ry="7.5" fill="#3b2b4a"/>
+  <circle cx="84" cy="101" r="2" fill="#fff"/>
+  <circle cx="120" cy="101" r="2" fill="#fff"/>
+  <ellipse cx="70" cy="118" rx="9" ry="6" fill="#ff9fbf" opacity=".75"/>
+  <ellipse cx="130" cy="118" rx="9" ry="6" fill="#ff9fbf" opacity=".75"/>
+  <path d="M88 122 Q100 133 112 122" fill="none" stroke="#d9567f" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="70,58 75,24 89,42 100,16 111,42 125,24 130,58" fill="#ffc83d" stroke="#e0a21b" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="100" cy="46" r="5" fill="#ff6f9f"/>
+  <circle cx="80" cy="50" r="3.5" fill="#a98bff"/>
+  <circle cx="120" cy="50" r="3.5" fill="#a98bff"/>
+</svg>

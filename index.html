@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>公主與青蛙的數學城堡</title>
+  <meta name="description" content="給 4–7 歲小朋友的互動式加減法與心算練習：數蘋果、十格框、心算快答、算盤圖解。">
+  <link rel="icon" href="images/castle.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="logo" data-go="home" aria-label="回城堡首頁">
+      <img src="images/castle.svg" alt="">
+      <span class="brand">公主與青蛙的數學城堡</span>
+    </button>
+    <div class="top-actions">
+      <span class="star-count" id="starCount" title="我的星星">⭐ 0</span>
+      <button class="toggle" id="soundToggle" aria-pressed="true">🔔<span class="tg-text">音效</span></button>
+      <button class="toggle" id="voiceToggle" aria-pressed="false">🔈<span class="tg-text">語音唸題</span></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- 首頁 -->
+    <section class="view active" id="view-home">
+      <div class="hero">
+        <img class="hero-princess" src="images/princess.svg" alt="公主">
+        <div class="bubble">歡迎來到數學城堡！<br>先選年齡，再選一個遊戲吧～</div>
+        <img class="hero-frog" src="images/frog.svg" alt="青蛙王子">
+      </div>
+
+      <h2 class="section-title">我幾歲？</h2>
+      <div class="age-picker" id="agePicker" role="radiogroup" aria-label="選擇年齡"></div>
+
+      <h2 class="section-title">要玩什麼？</h2>
+      <div class="menu">
+        <button class="menu-card c-pink" data-go="objects">
+          <span class="mc-icon">🍎</span><span class="mc-title">數蘋果</span><span class="mc-sub">拖一拖、數一數</span>
+        </button>
+        <button class="menu-card c-lav" data-go="tenframe">
+          <span class="mc-icon">🔟</span><span class="mc-title">十格框</span><span class="mc-sub">湊成 10 好朋友</span>
+        </button>
+        <button class="menu-card c-sky" data-go="numberline">
+          <span class="mc-icon">🐸</span><span class="mc-title">數線跳跳</span><span class="mc-sub">往右加、往左減</span>
+        </button>
+        <button class="menu-card c-gold" data-go="drill">
+          <span class="mc-icon">⚡</span><span class="mc-title">心算練習</span><span class="mc-sub">快問快答</span>
+        </button>
+        <button class="menu-card c-frog" data-go="abacus">
+          <span class="mc-icon">🧮</span><span class="mc-title">算盤教室</span><span class="mc-sub">看珠子怎麼算</span>
+        </button>
+        <button class="menu-card c-rose" data-go="rewards">
+          <span class="mc-icon">🎁</span><span class="mc-title">我的寶盒</span><span class="mc-sub">收集星星貼紙</span>
+        </button>
+      </div>
+      <div class="parent-link"><button class="btn" data-go="parent">👨‍👩‍👧 家長專區：學習紀錄與建議</button></div>
+      <p class="tip">⌨️ 可以用實體鍵盤輸入數字：按 <kbd>Enter</kbd> 送出、<kbd>Backspace</kbd> 刪除。</p>
+    </section>
+
+    <!-- 數蘋果 -->
+    <section class="view" id="view-objects">
+      <div class="view-head">
+        <button class="back" data-go="home">← 回城堡</button>
+        <h2>🍎 數蘋果</h2>
+        <div class="round-progress"></div>
+      </div>
+      <div class="stage"></div>
+    </section>
+
+    <!-- 十格框 -->
+    <section class="view" id="view-tenframe">
+      <div class="view-head">
+        <button class="back" data-go="home">← 回城堡</button>
+        <h2>🔟 十格框</h2>
+        <div class="round-progress"></div>
+      </div>
+      <div class="stage"></div>
+    </section>
+
+    <!-- 數線跳跳 -->
+    <section class="view" id="view-numberline">
+      <div class="view-head">
+        <button class="back" data-go="home">← 回城堡</button>
+        <h2>🐸 數線跳跳</h2>
+        <div class="round-progress"></div>
+      </div>
+      <div class="stage"></div>
+    </section>
+
+    <!-- 心算練習 -->
+    <section class="view" id="view-drill">
+      <div class="view-head">
+        <button class="back" data-go="home">← 回城堡</button>
+        <h2>⚡ 心算練習</h2>
+        <div class="round-progress"></div>
+      </div>
+      <div class="stage"></div>
+    </section>
+
+    <!-- 算盤教室 -->
+    <section class="view" id="view-abacus">
+      <div class="view-head">
+        <button class="back" data-go="home">← 回城堡</button>
+        <h2>🧮 算盤教室</h2>
+        <div class="round-progress"></div>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="free" role="tab">自由撥珠</button>
+        <button class="tab" data-tab="demo" role="tab">算式圖解</button>
+      </div>
+      <div class="abacus-pane" data-pane="free"></div>
+      <div class="abacus-pane" data-pane="demo" hidden></div>
+    </section>
+
+    <!-- 我的寶盒 -->
+    <section class="view" id="view-rewards">
+      <div class="view-head">
+        <button class="back" data-go="home">← 回城堡</button>
+        <h2>🎁 我的寶盒</h2>
+        <div class="round-progress"></div>
+      </div>
+      <div class="stage-plain"></div>
+    </section>
+    <!-- 家長專區 -->
+    <section class="view" id="view-parent">
+      <div class="view-head">
+        <button class="back" data-go="home">← 回城堡</button>
+        <h2>👨‍👩‍👧 家長專區</h2>
+        <div class="round-progress"></div>
+      </div>
+      <div class="stage-plain parent"></div>
+    </section>
+  </main>
+
+  <div class="cheer" id="cheer" aria-live="polite">
+    <img src="images/frog.svg" alt="">
+    <div class="cheer-text"></div>
+  </div>
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+  <script src="js/abacus.js"></script>
+  <script src="js/objects.js"></script>
+  <script src="js/tenframe.js"></script>
+  <script src="js/numberline.js"></script>
+  <script src="js/drill.js"></script>
+  <script src="js/rewards.js"></script>
+  <script src="js/parent.js"></script>
+</body>
+</html>

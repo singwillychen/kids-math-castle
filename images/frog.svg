@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- 青蛙王子 -->
+  <ellipse cx="60" cy="184" rx="26" ry="10" fill="#3f9e52"/>
+  <ellipse cx="140" cy="184" rx="26" ry="10" fill="#3f9e52"/>
+  <ellipse cx="100" cy="150" rx="66" ry="40" fill="#4cb862"/>
+  <ellipse cx="100" cy="160" rx="40" ry="24" fill="#c9f2c4"/>
+  <ellipse cx="100" cy="110" rx="74" ry="50" fill="#5ccb70"/>
+  <circle cx="60" cy="70" r="28" fill="#5ccb70"/>
+  <circle cx="140" cy="70" r="28" fill="#5ccb70"/>
+  <circle cx="60" cy="70" r="19" fill="#fff"/>
+  <circle cx="140" cy="70" r="19" fill="#fff"/>
+  <circle cx="63" cy="73" r="10" fill="#3b2b4a"/>
+  <circle cx="137" cy="73" r="10" fill="#3b2b4a"/>
+  <circle cx="66" cy="69" r="3.5" fill="#fff"/>
+  <circle cx="140" cy="69" r="3.5" fill="#fff"/>
+  <ellipse cx="48" cy="118" rx="11" ry="7" fill="#ff9fbf" opacity=".75"/>
+  <ellipse cx="152" cy="118" rx="11" ry="7" fill="#ff9fbf" opacity=".75"/>
+  <path d="M72 118 Q100 146 128 118" fill="none" stroke="#2f7a3b" stroke-width="5" stroke-linecap="round"/>
+  <polygon points="80,64 84,38 94,52 100,32 106,52 116,38 120,64" fill="#ffc83d" stroke="#e0a21b" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="100" cy="56" r="4.5" fill="#ff6f9f"/>
+</svg>
