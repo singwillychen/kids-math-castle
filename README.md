@@ -1,8 +1,10 @@
-# 公主與青蛙的數學城堡
+# Kid's Math Castle 公主與青蛙的數學城堡
 
 給 4–7 歲小朋友的互動式加減法與心算練習網站（HTML / CSS / JS）。
 
-- **最簡單**：直接用瀏覽器打開 `index.html`（紀錄存在這台裝置）。
+**🌐 線上直接玩：https://singwillychen.github.io/kids-math-castle/**
+
+- **最簡單**：開啟上面的網址，或下載後用瀏覽器打開 `index.html`（紀錄存在這台裝置）。
 - **多台平板共用紀錄**：放到 NAS 並執行 `server.py`（見下方）。
 
 ## 功能
