@@ -57,7 +57,8 @@
         if (n === q.a + q.b) later(() => App.speak('數完了！一共有幾顆呢？'), 600);
       }
     }));
-    App.speak(`${q.a} 顆蘋果，再加 ${q.b} 顆蘋果，一共有幾顆？`);
+    App.addSayButton(stage);
+    App.ask(`${q.a} 顆蘋果，再加 ${q.b} 顆蘋果，一共有幾顆？`);
   }
 
   function drawMinus() {
@@ -94,7 +95,8 @@
         else App.speak(String(n));
       }
     }));
-    App.speak(`籃子裡有 ${q.a} 顆蘋果，青蛙要吃 ${q.b} 顆，還剩幾顆？`);
+    App.addSayButton(stage);
+    App.ask(`籃子裡有 ${q.a} 顆蘋果，青蛙要吃 ${q.b} 顆，還剩幾顆？`);
   }
 
   function renumber(box) { $$('.item', box).forEach((it, i) => { it.dataset.n = i + 1; }); }

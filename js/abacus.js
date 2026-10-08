@@ -173,7 +173,7 @@
       count.textContent = `第 ${i + 1} / ${steps.length} 步`;
       prev.disabled = i === 0;
       next.disabled = i === steps.length - 1;
-      if (!quiet) App.speak(text.textContent.replace(/−/g, '減').replace(/\+/g, '加'));
+      if (!quiet) App.speak(text.textContent);
       if (i > 0) App.sfx.pop();
       if (i === steps.length - 1) stop();
     }
@@ -232,7 +232,7 @@
           <div class="card target-card">
             <span class="small">👑 公主的挑戰：請撥出</span>
             <div class="target-num"></div>
-            <div class="row-btns"><button class="btn new-target">換一題</button><button class="btn clear-ab">🧹 清盤</button></div>
+            <div class="row-btns"><button class="btn say-again">🔈 再唸一次</button><button class="btn new-target">換一題</button><button class="btn clear-ab">🧹 清盤</button></div>
           </div>
           <p class="hint-text">上面一顆珠子代表 <b>5</b>，下面每顆代表 <b>1</b>。<br>把珠子撥到中間的橫樑才算數喔！點珠子就會移動。</p>
         </div>
@@ -261,7 +261,7 @@
       tgt.textContent = t;
       freeAb.setValue(0);
       bigNum.textContent = 0;
-      App.speak(`請撥出 ${t}`);
+      App.ask(`請撥出 ${t}`);
     }
     $('.new-target', pane).onclick = newTarget;
     $('.clear-ab', pane).onclick = () => { freeAb.setValue(0); bigNum.textContent = 0; App.sfx.pop(); };

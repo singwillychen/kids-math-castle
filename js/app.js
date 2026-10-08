@@ -1,7 +1,5 @@
 /* 公主與青蛙的數學城堡：共用功能（設定、導覽、語音、音效、數字鍵盤、星星） */
 (function () {
-  const STORE_KEY = 'princess-frog-math-v1';
-
   const AGES = {
     k1: { label: '中班', years: '4–5 歲', max: 5, desc: '5 以內加減' },
     k2: { label: '大班', years: '5–6 歲', max: 10, desc: '10 以內加減' },
@@ -19,7 +17,23 @@
   const GOOD = ['答對了！好棒！', '太厲害了！', '青蛙王子為你鼓掌！', '公主送你一顆星星！', '你是數學小天才！', '完全正確！'];
   const BAD = ['再試試看！', '沒關係，再想一想～', '差一點點，再來一次！'];
 
-  const state = { age: 'k2', voice: false, sound: true, stars: 0, roundLen: 5 };
+  /* 50 組原創頭像（也可以在建立帳號時上傳自己的圖片） */
+  const AVATARS = ['🐸', '👑', '🍄', '⭐', '🦄', '🐱', '🐶', '🐼', '🦊', '🐰', '🐻', '🐨', '🐯', '🦁', '🐮', '🐷', '🐵',
+    '🐔', '🐧', '🐤', '🦉', '🐙', '🦋', '🐞', '🐢', '🦖', '🦕', '🐳', '🐬', '🦭', '🐹', '🦔', '🐝', '🌈', '🌸', '🌻',
+    '🍓', '🍰', '🧁', '🍩', '🍦', '🚀', '🚗', '🚂', '⚽', '🎈', '🎨', '🎸', '🌙', '☀️'];
+  const AVATAR_BGS = ['#ffe1ec', '#ece5ff', '#dff5e3', '#fff3cf', '#ddf3ff', '#ffe9dc', '#f3e8ff', '#e0f7f4', '#fde2e2', '#eaf4d3'];
+  const KID_COLORS = ['#ff7eb0', '#8a68f0', '#4cb862', '#2a9be0', '#f0a000', '#e5603b'];
+
+  /* 目前登入的小朋友；未登入時用預設值，避免畫面出錯 */
+  const GUEST = { id: null, name: '', age: 'k2', stars: 0, roundLen: 5, log: [], avatar: { type: 'emoji', v: '🐸', bg: '#dff5e3' } };
+  const profile = () => (Store.db.profiles[Store.device.activeId] || GUEST);
+  const state = {};
+  ['age', 'stars', 'roundLen'].forEach(k => Object.defineProperty(state, k, {
+    get: () => profile()[k], set: v => { profile()[k] = v; }, enumerable: true
+  }));
+  ['voice', 'sound'].forEach(k => Object.defineProperty(state, k, {
+    get: () => Store.device[k], set: v => { Store.device[k] = v; }, enumerable: true
+  }));
 
   /* 題型分類（給家長頁分析用） */
   const SKILLS = {
@@ -46,34 +60,40 @@
   const opSym = op => (op === '+' ? '+' : '−');
   const opWord = op => (op === '+' ? '加' : '減');
 
-  function load() {
-    try { Object.assign(state, JSON.parse(localStorage.getItem(STORE_KEY) || '{}')); } catch (e) { /* 無痕模式等情況 */ }
-    if (!AGES[state.age]) state.age = 'k2';
-    if (![5, 8, 10].includes(state.roundLen)) state.roundLen = 5;
-  }
   function save() {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* 忽略 */ }
+    Store.saveDevice();
+    if (Store.device.activeId && Store.db.profiles[Store.device.activeId]) Store.touch(Store.device.activeId);
+  }
+  function normalizeProfile(p) {
+    if (!AGES[p.age]) p.age = 'k2';
+    if (![5, 8, 10].includes(p.roundLen)) p.roundLen = 5;
+    if (!Array.isArray(p.log)) p.log = [];
+    if (typeof p.stars !== 'number') p.stars = 0;
   }
 
-  /* ---------- 練習紀錄 ---------- */
-  const LOG_KEY = 'princess-frog-math-log-v1';
-  const LOG_MAX = 800;
-  let log = [];
-  function loadLog() {
-    try { log = JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); } catch (e) { log = []; }
-    if (!Array.isArray(log)) log = [];
-  }
+  /* ---------- 練習紀錄（每位小朋友各自一份） ---------- */
   // tries：答了幾次；solved：最後有沒有自己答對（第三次錯會直接公布答案）
   function record(module, skill, q, tries, solved) {
-    log.push({ t: Date.now(), m: module, s: skill, q, n: tries, ok: solved && tries === 1, solved, age: state.age });
-    if (log.length > LOG_MAX) log = log.slice(-LOG_MAX);
-    try { localStorage.setItem(LOG_KEY, JSON.stringify(log)); } catch (e) { /* 忽略 */ }
+    const p = profile();
+    if (!p.id) return;
+    p.log.push({ t: Date.now(), m: module, s: skill, q, n: tries, ok: solved && tries === 1, solved, age: p.age });
+    if (p.log.length > Store.LOG_MAX) p.log = p.log.slice(-Store.LOG_MAX);
+    Store.touch(p.id);
   }
-  function getLog() { return log; }
-  function clearLog() {
-    log = [];
-    try { localStorage.removeItem(LOG_KEY); } catch (e) { /* 忽略 */ }
+  function getLog(id) { const p = id ? Store.db.profiles[id] : profile(); return (p && p.log) || []; }
+  function clearLog(id) {
+    const p = id ? Store.db.profiles[id] : profile();
+    if (!p || !p.id) return;
+    p.log = [];
+    Store.touch(p.id);
   }
+
+  function avatarHTML(av, cls) {
+    av = av || GUEST.avatar;
+    if (av.type === 'img') return `<img class="avatar ${cls || ''}" src="${av.v}" alt="">`;
+    return `<span class="avatar ${cls || ''}" style="background:${av.bg || '#ffe1ec'}">${av.v}</span>`;
+  }
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   /* ---------- 出題 ---------- */
   let lastProblemKey = '';
@@ -107,23 +127,64 @@
   }
 
   /* ---------- 語音 ---------- */
-  let voices = [];
+  const ZH = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  function zhNum(n) {
+    n = Number(n);
+    if (n < 10) return ZH[n];
+    if (n < 20) return '十' + (n % 10 ? ZH[n % 10] : '');
+    if (n < 100) return ZH[Math.floor(n / 10)] + '十' + (n % 10 ? ZH[n % 10] : '');
+    return String(n);
+  }
+  // 把畫面文字轉成好念的中文：6 − 4 = ? → 六減四等於多少
+  function toSpeech(text) {
+    return String(text)
+      .replace(/(\d+)\s*[−-]\s*(\d+)/g, '$1減$2')
+      .replace(/(\d+)\s*[+＋]\s*(\d+)/g, '$1加$2')
+      .replace(/[−]\s*(\d+)/g, '減$1').replace(/[+＋]\s*(\d+)/g, '加$1')
+      .replace(/\s*=\s*\?/g, '等於多少').replace(/\s*=\s*/g, '等於')
+      .replace(/\d+/g, m => zhNum(m))
+      .replace(/[（）()]/g, ' ');
+  }
+
+  let voices = [], speakTimer = null, currentUtter = null, lastQuestion = '';
   function loadVoices() { if ('speechSynthesis' in window) voices = speechSynthesis.getVoices(); }
   function speak(text, force) {
-    if ((!state.voice && !force) || !('speechSynthesis' in window)) return;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    const v = voices.find(x => /zh[-_]TW/i.test(x.lang)) ||
-              voices.find(x => /zh[-_](HK|Hant)/i.test(x.lang)) ||
-              voices.find(x => /^zh/i.test(x.lang));
-    if (v) u.voice = v;
-    u.lang = v ? v.lang : 'zh-TW';
-    u.rate = 0.9;
-    u.pitch = 1.1;
-    speechSynthesis.speak(u);
+    if ((!state.voice && !force) || !('speechSynthesis' in window) || !text) return;
+    const synth = speechSynthesis;
+    clearTimeout(speakTimer);
+    // Chrome 在「正在唸」時立刻 cancel 再 speak，常會把新句子吞掉，所以先停、隔一下再唸
+    const busy = synth.speaking || synth.pending;
+    if (busy) synth.cancel();
+    speakTimer = setTimeout(() => {
+      const u = new SpeechSynthesisUtterance(toSpeech(text));
+      const v = voices.find(x => /zh[-_]TW/i.test(x.lang)) ||
+                voices.find(x => /zh[-_](HK|Hant)/i.test(x.lang)) ||
+                voices.find(x => /^zh/i.test(x.lang));
+      if (v) u.voice = v;
+      u.lang = v ? v.lang : 'zh-TW';
+      u.rate = 0.88;
+      u.pitch = 1.1;
+      currentUtter = u;      // 保留參考，避免被瀏覽器回收而中斷
+      if (synth.paused) synth.resume();
+      synth.speak(u);
+    }, busy ? 220 : 30);
   }
-  const problemText = p => `${p.a} ${opWord(p.op)} ${p.b}，等於多少？`;
-  function stopSpeaking() { if ('speechSynthesis' in window) speechSynthesis.cancel(); }
+  // 唸題目：記下來給「再唸一次」用，並稍微延後避開音效
+  function ask(text) {
+    lastQuestion = text;
+    clearTimeout(speakTimer);
+    speakTimer = setTimeout(() => speak(text), 350);
+  }
+  function repeatQuestion() {
+    if (!lastQuestion) return;
+    if (!('speechSynthesis' in window)) { toast('這個瀏覽器不支援語音'); return; }
+    speak(lastQuestion, true);
+  }
+  const problemText = p => `${p.a} ${opSym(p.op)} ${p.b} = ?`;
+  function stopSpeaking() {
+    clearTimeout(speakTimer);
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+  }
 
   /* ---------- 音效（Web Audio，不需音檔） ---------- */
   let actx;
@@ -156,6 +217,7 @@
   let current = 'home';
   function go(name) {
     if (!document.getElementById('view-' + name)) name = 'home';
+    if (name !== 'login' && name !== 'parent' && !profile().id) name = 'login';   // 還沒選人就先到登入畫面
     $$('.modal-backdrop').forEach(m => m.remove());
     if (modules[current] && modules[current].leave) modules[current].leave();
     stopSpeaking();
@@ -168,12 +230,41 @@
   }
 
   function renderHome() {
+    const p = profile();
+    $('#homeGreeting').innerHTML = p.id
+      ? `嗨，<b>${esc(p.name)}</b>！歡迎來到數學城堡！<br>先選年齡，再選一個遊戲吧～`
+      : '歡迎來到數學城堡！';
     $('#agePicker').innerHTML = Object.entries(AGES).map(([k, a]) => `
       <button class="age-btn ${k === state.age ? 'active' : ''}" data-age="${k}" role="radio" aria-checked="${k === state.age}">
         <span class="age-label">${a.label}</span>
         <span class="age-years">${a.years}</span>
         <span class="age-desc">${a.desc}</span>
       </button>`).join('');
+  }
+
+  // 在題目文字下方加上「再唸一次」
+  function addSayButton(root) {
+    const pr = $('.prompt', root);
+    if (!pr || $('.say-row', root)) return;
+    const row = document.createElement('div');
+    row.className = 'say-row';
+    row.innerHTML = '<button type="button" class="btn say-again">🔈 再唸一次</button>';
+    pr.after(row);
+  }
+
+  /* ---------- 帳號 ---------- */
+  function refreshUser() {
+    const p = profile();
+    $('#userBtn').innerHTML = p.id ? `${avatarHTML(p.avatar, 'avatar-sm')}<span class="user-name">${esc(p.name)}</span>` : '<span class="user-name">👤 選擇玩家</span>';
+    updateStarCount();
+  }
+  function login(id) {
+    Store.device.activeId = id;
+    Store.saveDevice();
+    normalizeProfile(profile());
+    refreshUser();
+    go('home');
+    speak(`嗨，${profile().name}！`);
   }
 
   /* ---------- 星星與回饋 ---------- */
@@ -418,18 +509,20 @@
     v.firstChild.textContent = state.voice ? '🔊' : '🔈';
   }
 
-  function init() {
-    load();
-    loadLog();
+  async function init() {
     loadVoices();
     if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = loadVoices;
-    updateStarCount();
+    await Store.init();
+    Object.values(Store.db.profiles).forEach(normalizeProfile);
+    Store.onChange(() => { if (current === 'parent' && modules.parent.onSync) modules.parent.onSync(); });
+    refreshUser();
     syncToggles();
-    renderHome();
+    go(profile().id ? 'home' : 'login');
 
     document.addEventListener('click', e => {
       const goBtn = e.target.closest('[data-go]');
       if (goBtn) { sfx.tap(); go(goBtn.dataset.go); return; }
+      if (e.target.closest('.say-again')) { repeatQuestion(); return; }
       const ageBtn = e.target.closest('[data-age]');
       if (ageBtn) {
         state.age = ageBtn.dataset.age;
@@ -456,12 +549,12 @@
   document.addEventListener('DOMContentLoaded', init);
 
   window.App = {
-    state, AGES, STICKERS, STARS_PER_STICKER, SKILLS, MODULE_NAMES, modules,
-    skillOf, record, getLog, clearLog,
-    $, $$, rand, pick, opSym, opWord,
+    state, AGES, STICKERS, STARS_PER_STICKER, SKILLS, MODULE_NAMES, AVATARS, AVATAR_BGS, KID_COLORS, modules,
+    skillOf, record, getLog, clearLog, profile, normalizeProfile, login, refreshUser, avatarHTML, esc,
+    $, $$, rand, pick, opSym, opWord, zhNum, toSpeech,
     ageCfg: () => AGES[state.age],
-    save, makeProblem, speak, problemText, stopSpeaking, sfx,
+    save, makeProblem, speak, ask, repeatQuestion, problemText, stopSpeaking, sfx,
     go, addStars, updateStarCount, cheer, toast, progressDots, modal, finishRound,
-    createKeypad, flipMove, makeDraggable
+    createKeypad, flipMove, makeDraggable, addSayButton
   };
 })();

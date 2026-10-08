@@ -53,7 +53,7 @@
         </div>
         <div class="equation big"><b class="qa"></b> <span class="qop"></span> <b class="qb"></b> = <span class="slot">?</span></div>
         <div class="drill-tools">
-          <button class="btn say-btn">🔈 唸題目</button>
+          <button class="btn say-again">🔈 再唸一次</button>
           <button class="btn abacus-btn">🧮 算盤圖解</button>
           <button class="btn setup-btn">⚙️ 換設定</button>
         </div>
@@ -61,7 +61,6 @@
       <div class="pad-area"></div>`;
     slot = $('.slot', stage);
     pad = App.createKeypad($('.pad-area', stage), { display: slot, onSubmit: submit });
-    $('.say-btn', stage).addEventListener('click', () => App.speak(App.problemText(q), true));
     $('.abacus-btn', stage).addEventListener('click', () => {
       $('.abacus-btn', stage).classList.remove('pulse');
       Abacus.openDemo(q);
@@ -87,7 +86,7 @@
     $('.abacus-btn', stage).classList.remove('pulse');
     pad.clear();
     pad.enable(true);
-    App.speak(App.problemText(q));
+    App.ask(App.problemText(q));
   }
 
   function setStreak() { $('.streak', stage).textContent = `🔥 連續答對 ${streak} 題`; }

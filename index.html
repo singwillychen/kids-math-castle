@@ -6,7 +6,7 @@
   <title>公主與青蛙的數學城堡</title>
   <meta name="description" content="給 4–7 歲小朋友的互動式加減法與心算練習：數蘋果、十格框、心算快答、算盤圖解。">
   <link rel="icon" href="images/castle.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
   <header class="topbar">
@@ -15,6 +15,7 @@
       <span class="brand">公主與青蛙的數學城堡</span>
     </button>
     <div class="top-actions">
+      <button class="user-btn" id="userBtn" data-go="login" title="切換玩家"></button>
       <span class="star-count" id="starCount" title="我的星星">⭐ 0</span>
       <button class="toggle" id="soundToggle" aria-pressed="true">🔔<span class="tg-text">音效</span></button>
       <button class="toggle" id="voiceToggle" aria-pressed="false">🔈<span class="tg-text">語音唸題</span></button>
@@ -22,11 +23,16 @@
   </header>
 
   <main>
+    <!-- 登入：選擇玩家 -->
+    <section class="view" id="view-login">
+      <div class="stage-plain"></div>
+    </section>
+
     <!-- 首頁 -->
-    <section class="view active" id="view-home">
+    <section class="view" id="view-home">
       <div class="hero">
         <img class="hero-princess" src="images/princess.svg" alt="公主">
-        <div class="bubble">歡迎來到數學城堡！<br>先選年齡，再選一個遊戲吧～</div>
+        <div class="bubble" id="homeGreeting">歡迎來到數學城堡！</div>
         <img class="hero-frog" src="images/frog.svg" alt="青蛙王子">
       </div>
 
@@ -139,13 +145,15 @@
   </div>
   <div class="toast" id="toast" aria-live="polite"></div>
 
-  <script src="js/app.js"></script>
-  <script src="js/abacus.js"></script>
-  <script src="js/objects.js"></script>
-  <script src="js/tenframe.js"></script>
-  <script src="js/numberline.js"></script>
-  <script src="js/drill.js"></script>
-  <script src="js/rewards.js"></script>
-  <script src="js/parent.js"></script>
+  <script src="js/storage.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/login.js?v=3"></script>
+  <script src="js/abacus.js?v=3"></script>
+  <script src="js/objects.js?v=3"></script>
+  <script src="js/tenframe.js?v=3"></script>
+  <script src="js/numberline.js?v=3"></script>
+  <script src="js/drill.js?v=3"></script>
+  <script src="js/rewards.js?v=3"></script>
+  <script src="js/parent.js?v=3"></script>
 </body>
 </html>

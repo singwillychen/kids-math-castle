@@ -39,7 +39,7 @@
     idx++; tries = 0; busy = false; bridged = false;
     q = makeQ();
     $('.round-progress', view).innerHTML = App.progressDots(idx, TOTAL());
-    let body;
+    let body, speech;
     if (q.type === 'count') {
       const frames = q.size === 20 ? frame(10, 10, 'pink') + frame(10, q.n - 10, 'pink') : frame(q.size, q.n, 'pink');
       body = `
@@ -47,14 +47,14 @@
         <div class="frames">${frames}</div>
         <p class="small center">${q.size === 5 ? '一排有 5 格喔！' : '一排有 5 格，一個框有 10 格喔！'}</p>
         <div class="equation">一共有 <span class="slot">?</span> 個</div>`;
-      App.speak('數一數，有幾個圓點？');
+      speech = '數一數，有幾個圓點？';
     } else if (q.type === 'make') {
       body = `
         <p class="prompt">還要幾個，才能把 ${q.size} 格都裝滿？</p>
         <div class="frames">${frame(q.size, q.n, 'pink')}</div>
         <p class="small center">可以點空格子，放上小青蛙點點來幫忙數。</p>
         <div class="equation"><b>${q.n}</b> + <span class="slot">?</span> = <b>${q.size}</b></div>`;
-      App.speak(`${q.n} 再加幾個，會變成 ${q.size}？`);
+      speech = `${q.n} 再加幾個，會變成 ${q.size}？`;
     } else {
       body = `
         <p class="prompt">${q.a} + ${q.b} 等於多少？用「湊十」來想一想！</p>
@@ -62,11 +62,13 @@
         <div class="bridge-row"><button class="btn bridge-btn">🐸 青蛙幫我湊十</button></div>
         <div class="bridge-steps"></div>
         <div class="equation"><b>${q.a}</b> + <b>${q.b}</b> = <span class="slot">?</span></div>`;
-      App.speak(`${q.a} 加 ${q.b}，等於多少？`);
+      speech = `${q.a} + ${q.b} = ?`;
     }
     stage.innerHTML = `<div class="card activity">${body}</div><div class="pad-area"></div>`;
     slot = $('.slot', stage);
     pad = App.createKeypad($('.pad-area', stage), { display: slot, onSubmit: submit });
+    App.addSayButton(stage);
+    App.ask(speech);
 
     if (q.type === 'make') {
       $$('.cell', stage).forEach(cell => {

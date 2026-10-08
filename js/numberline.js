@@ -48,7 +48,8 @@
     slot = $('.slot', stage);
     pad = App.createKeypad($('.pad-area', stage), { display: slot, onSubmit: submit });
     $('.jump-btn', stage).addEventListener('click', () => jumpOnce());
-    App.speak(`青蛙站在 ${q.a}，要往${dir}跳 ${q.b} 格，會跳到哪裡？`);
+    App.addSayButton(stage);
+    App.ask(`青蛙站在 ${q.a}，要往${dir}跳 ${q.b} 格，會跳到哪裡？`);
   }
 
   function arc(from, to, cls) {

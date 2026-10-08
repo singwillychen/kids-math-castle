@@ -557,3 +557,109 @@ main { padding: 0 16px 120px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* ===================== 第三版：帳號、頭像、再唸一次、存檔 ===================== */
+.avatar {
+  display: inline-grid; place-items: center; flex: none;
+  width: 48px; height: 48px; border-radius: 50%; font-size: 28px; line-height: 1;
+  object-fit: cover; background: var(--pink-3); border: 3px solid #fff; box-shadow: 0 2px 6px rgba(75, 58, 92, .12);
+}
+.avatar-sm { width: 32px; height: 32px; font-size: 18px; border-width: 2px; }
+.avatar-md { width: 52px; height: 52px; font-size: 30px; }
+.avatar-lg { width: 96px; height: 96px; font-size: 56px; border-width: 4px; }
+.avatar-xl { width: 120px; height: 120px; font-size: 70px; border-width: 5px; }
+
+.user-btn {
+  display: inline-flex; align-items: center; gap: 6px; max-width: 170px;
+  padding: 4px 12px 4px 4px; border-radius: 999px; background: #fff; border: 3px solid var(--pink-2); font-weight: 800;
+}
+.user-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 登入畫面 */
+.login-hero { display: flex; align-items: flex-end; justify-content: center; gap: 12px; margin: 10px 0 24px; }
+.login-hero img { width: 110px; animation: bob 3s ease-in-out infinite; }
+.login-hero img:last-child { animation-delay: .6s; }
+.profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto; }
+.profile-card {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 22px 12px; border-radius: 28px; background: #fff; box-shadow: var(--shadow);
+  border: 4px solid transparent; transition: transform .15s, border-color .15s;
+}
+.profile-card:hover { transform: translateY(-4px); border-color: var(--pink-2); }
+.profile-card:active { transform: scale(.97); }
+.pc-name { font-size: 1.35rem; font-weight: 900; }
+.pc-meta { color: var(--muted); font-weight: 700; font-size: .95rem; }
+.add-card { background: var(--pink-3); border: 4px dashed var(--pink-2); box-shadow: none; }
+.add-plus { background: #fff; color: var(--pink-deep); font-weight: 900; }
+
+/* 帳號編輯器 */
+.editor { display: flex; flex-direction: column; gap: 16px; }
+.editor-preview { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field > span { font-weight: 800; }
+.field .chips { justify-content: flex-start; }
+.name-input, .pin-row input {
+  font: inherit; font-size: 1.2rem; font-weight: 700; padding: 12px 16px; border-radius: 16px;
+  border: 3px solid var(--lav-2); color: var(--ink); background: #fff; min-width: 0;
+}
+.name-input:focus, .pin-row input:focus { outline: none; border-color: var(--lav); }
+.avatar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 8px; max-height: 280px; overflow-y: auto; padding: 4px; }
+.avatar-opt {
+  aspect-ratio: 1; border-radius: 50%; font-size: 30px; display: grid; place-items: center; cursor: pointer;
+  border: 3px solid transparent; transition: transform .1s;
+}
+.avatar-opt:hover { transform: scale(1.08); }
+.avatar-opt.active { border-color: var(--pink-deep); box-shadow: 0 0 0 3px var(--pink-2); }
+.upload-opt { background: #fff; border: 3px dashed var(--lav); }
+.editor-msg { margin: 0; min-height: 1.3em; color: var(--red); font-weight: 700; text-align: center; }
+
+/* 再唸一次 */
+.say-row { display: flex; justify-content: center; margin-top: -6px; }
+.say-again { min-height: 44px; padding: 6px 16px; font-size: 1rem; border-color: var(--lav-2); color: var(--lav-deep); box-shadow: 0 4px 0 var(--lav-2); }
+
+/* 家長專區：帳號分頁與比較 */
+.acct-tabs { display: flex; flex-wrap: wrap; gap: 10px; }
+.acct-tab {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 48px;
+  padding: 6px 16px 6px 8px; border-radius: 999px; font-weight: 800;
+  background: #fff; border: 3px solid var(--lav-2); color: var(--ink);
+}
+.acct-tab[data-sel="compare"], .add-acct { padding-left: 16px; }
+.acct-tab.active { border-color: var(--kid, var(--lav)); background: var(--lav-2); }
+.add-acct { border-style: dashed; color: var(--pink-deep); border-color: var(--pink-2); }
+.parent-body { display: flex; flex-direction: column; gap: 18px; }
+.table-wrap { overflow-x: auto; }
+.cmp-table { width: 100%; border-collapse: collapse; min-width: 360px; }
+.cmp-table th, .cmp-table td { padding: 10px 12px; text-align: center; border-bottom: 2px dashed var(--pink-3); }
+.cmp-table tbody th { text-align: left; color: var(--muted); font-weight: 800; white-space: nowrap; }
+.cmp-kid { vertical-align: bottom; }
+.cmp-kid > span:not(.avatar) { display: block; margin-top: 4px; font-size: 1.1rem; color: var(--kid); }
+.cmp-kid .avatar { box-shadow: 0 0 0 3px var(--kid); }
+.cmp-table td.muted { color: #c9bfd0; }
+.wk-group { flex: 1; width: 100%; display: flex; align-items: flex-end; justify-content: center; gap: 3px; background: #f6f3f8; border-radius: 10px; padding: 0 3px; }
+.wk-kid { flex: 1; max-width: 18px; min-height: 2px; border-radius: 6px 6px 0 0; }
+.child-head { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; border-left: 8px solid var(--kid); }
+.child-head h3 { margin: 0 0 4px; font-size: 1.6rem; }
+.child-info { flex: 1; min-width: 200px; }
+.child-info p { margin: 0; }
+.btn.danger { color: #c23b3b; border-color: #ffd0d0; box-shadow: 0 4px 0 #ffd0d0; }
+.store-list { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.store-list li { display: flex; gap: 12px; align-items: flex-start; line-height: 1.7; }
+.st-icon { font-size: 1.6rem; line-height: 1.2; }
+.store-list code, .parent code { background: var(--lav-2); padding: 1px 6px; border-radius: 6px; font-size: .9em; }
+.ok-text { color: var(--frog-deep); }
+.warn-text { color: #c46a00; }
+.pin-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.pin-row input { width: 200px; font-size: 1rem; }
+.link-btn { margin-top: 12px; color: var(--muted); text-decoration: underline; font-size: .95rem; }
+
+@media (max-width: 600px) {
+  .user-btn { padding-right: 4px; }
+  .user-btn .user-name { display: none; }
+  .star-count { padding: 6px 10px; font-size: 1rem; }
+  .toggle { padding: 6px 8px; }
+  .login-hero img { width: 80px; }
+  .profile-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .avatar-lg { width: 80px; height: 80px; font-size: 46px; }
+  .pin-row input { width: 100%; }
+}
